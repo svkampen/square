@@ -37,3 +37,5 @@ def rgb2lab(arr):
 def cie76_deltaE(lab1, lab2):
     return math.sqrt((lab2[0] - lab1[0])**2 + (lab2[1] - lab1[1])**2 + (lab2[2] - lab1[2])**2)
 
+def rgbdiff(rgb1, rgb2):
+    return cie76_deltaE(rgb2lab(rgb1), rgb2lab(rgb2))
