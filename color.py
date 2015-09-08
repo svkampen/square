@@ -1,3 +1,5 @@
+import math
+
 def rgb2xyz(arr):
     arr = [it/255 for it in arr]
     arr = [((it + 0.055) / 1.055) ** 2.4 if it > 0.04045 else it / 12.92 for it in arr]
@@ -31,3 +33,7 @@ def xyz2lab(arr):
 
 def rgb2lab(arr):
     return xyz2lab(rgb2xyz(arr))
+
+def cie76_deltaE(lab1, lab2):
+    return math.sqrt((lab2[0] - lab1[0])**2 + (lab2[1] - lab1[1])**2 + (lab2[2] - lab1[2])**2)
+
