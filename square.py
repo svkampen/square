@@ -92,3 +92,7 @@ def process_area(thresh, area):
         return [False, average]
 
     return [True, average]
+
+def calculate_percentage(id, a, part):
+    total = id.size
+    return 100 - ((part / total) * 100.0)
