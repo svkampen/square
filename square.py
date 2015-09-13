@@ -96,3 +96,37 @@ def process_area(thresh, area):
 def calculate_percentage(id, a, part):
     total = id.size
     return 100 - ((part / total) * 100.0)
+
+def transform_image(input, output, thresh):
+    original_image = Image.open(input)
+
+    # When indexing, instead of doing [x,y], remember to do [y,x]
+    imagedata = numpy.array(original_image,dtype=numpy.float64)
+    imagedata /= 255.0
+
+    areas = sq(imagedata)
+    areas_size = imagedata.size
+
+    while areas:
+        for area in areas:
+            assert area.base is imagedata
+            area_done, average = process_area(thresh, area)
+            if area.shape[0] < 3 or area.shape[1] < 3:
+                area_done = True
+            if (area_done):
+                print("Finished area with size: (%d, %d)\t\t%.2f"
+                        % (*area.shape[:2], calculate_percentage(imagedata,
+                            areas, areas_size)))
+                remove_array(areas, area)
+                areas_size -= area.size
+                numpy.copyto(area, numpy.full(area.shape, average, dtype=numpy.float64))
+            else:
+                print("Splitting area with size: (%d, %d)\t\t%.2f"
+                        % (*area.shape[:2], calculate_percentage(imagedata,
+                            areas, areas_size)))
+                remove_array(areas, area)
+                for q in quarter(area):
+                    areas.append(q)
+
+    new_image = Image.fromarray((imagedata * 255).round().astype(numpy.uint8))
+    new_image.save(output)
