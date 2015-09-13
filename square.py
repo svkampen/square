@@ -79,3 +79,16 @@ def quarter(data):
             data[:y_pair[0],x_pair[0]:],
             data[y_pair[1]:,:x_pair[1]],
             data[y_pair[1]:,x_pair[0]:]]
+def process_area(thresh, area):
+    """Process an Area. Returns True if the area's max_deviation is < thresh,
+    False otherwise."""
+    if 0 in area.shape:
+        return [True, numpy.array([0,0,0])]
+    average = area.mean(0).mean(0)
+    pixel_list = area.reshape(reduce(mul, area.shape[:2]), 3)
+    max_deviation = max(map(partial(rgbdiff, average), pixel_list))
+
+    if (max_deviation > thresh):
+        return [False, average]
+
+    return [True, average]
