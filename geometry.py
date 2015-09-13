@@ -10,3 +10,8 @@ class Vector2():
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
+def get_slice(data, area):
+    return data[area.y:area.y+area.dy,
+                area.x:area.x+area.dx]
+
