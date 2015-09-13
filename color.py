@@ -1,7 +1,7 @@
 import math
 
 def rgb2xyz(arr):
-    arr = [it/255 for it in arr]
+    """Convert RGB color representation to CIE XYZ"""
     arr = [((it + 0.055) / 1.055) ** 2.4 if it > 0.04045 else it / 12.92 for it in arr]
     arr = [it * 100 for it in arr]
 
@@ -11,6 +11,7 @@ def rgb2xyz(arr):
     return [X,Y,Z]
 
 def xyz2lab(arr):
+    """ Convert CIE XYZ to CIE L* a* b* """
     ref_x = 95.047
     ref_y = 100.000
     ref_z = 108.883
@@ -32,12 +33,16 @@ def xyz2lab(arr):
     return (CIE_L, CIE_a, CIE_b)
 
 def rgb2lab(arr):
+    """ RGB -> LAB """
     return xyz2lab(rgb2xyz(arr))
 
 def cie76_deltaE(lab1, lab2):
+    """ Delta-Empfindung calculation according to the Commission internationale de l'éclairage, '76
+    basically just the euclidean distance """
     return math.sqrt((lab2[0] - lab1[0])**2 + (lab2[1] - lab1[1])**2 + (lab2[2] - lab1[2])**2)
 
 def cie94_deltaE(lab1, lab2):
+    """ Delta-Empfindung calculation according to the CIE, '94 """
     delta_l = lab1[0] - lab2[0]
     c1 = math.sqrt(lab1[1]**2 + lab1[2]**2)
     c2 = math.sqrt(lab2[1]**2 + lab2[2]**2)
@@ -50,4 +55,5 @@ def cie94_deltaE(lab1, lab2):
     return math.sqrt((delta_l / s_l)**2 + (delta_c / s_c)**2 + (delta_h/s_h)**2)
 
 def rgbdiff(rgb1, rgb2):
-    return cie94_deltaE(rgb2lab(rgb1), rgb2lab(rgb2))
+    """ Calculates RGB color "distance", using L* a* b* conversions """
+    return cie76_deltaE(rgb2lab(rgb1), rgb2lab(rgb2))
