@@ -19,3 +19,13 @@ def rgbdiff(arr1: numpy.ndarray, arr2: numpy.ndarray) -> float:
     """ Get the color difference for two RGB colors. """
     return sq_c.rgbdiff_p(arr1[0], arr1[1], arr1[2],
             arr2[0], arr2[1], arr2[2])
+
+def remove_array(L,arr):
+    ind = 0
+    size = len(L)
+    while ind != size and not (id(L[ind]) == id(arr)):
+        ind += 1
+    if ind != size:
+        L.pop(ind)
+    else:
+        raise ValueError('array not found in list.')
