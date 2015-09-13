@@ -130,3 +130,13 @@ def transform_image(input, output, thresh):
 
     new_image = Image.fromarray((imagedata * 255).round().astype(numpy.uint8))
     new_image.save(output)
+
+
+if __name__ == "__main__":
+    print("Square, version 0 - (c) 2015 Sam van Kampen")
+    print("Licensed under the GNU GPL version 3.0")
+
+    if len(sys.argv) == 1:
+        print("Usage: sq <input> <output> [delta-e threshold]")
+    else:
+        transform_image(sys.argv[1], sys.argv[2], float(sys.argv[3]))
