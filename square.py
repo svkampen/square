@@ -55,3 +55,27 @@ def sq(data):
                 edge_length, edge_length)))
 
     return slices
+
+
+
+def quarter(data):
+    """Split an image into four quarters. Return them in order topleft, topright, botleft, botright.
+    If the image has an odd number of pixels on an axis, have one half be +0.5px, the other -0.5px.
+    """
+
+    size = Vector2(*data.shape[:2])
+    x_pair = [size.x / 2, size.x / 2]
+    y_pair = [size.y / 2, size.y / 2]
+
+    if (size.x % 2 == 1):
+        x_pair[0] = floor(x_pair[0])
+        x_pair[1] = ceil(x_pair[1])
+
+    if (size.y % 2 == 1):
+        y_pair[0] = floor(y_pair[0])
+        y_pair[1] = ceil(y_pair[1])
+
+    return [data[:y_pair[0],:x_pair[1]],
+            data[:y_pair[0],x_pair[0]:],
+            data[y_pair[1]:,:x_pair[1]],
+            data[y_pair[1]:,x_pair[0]:]]
